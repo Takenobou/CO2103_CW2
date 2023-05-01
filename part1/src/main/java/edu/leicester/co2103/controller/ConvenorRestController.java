@@ -15,8 +15,12 @@ import java.util.Optional;
 @RequestMapping("/convenors")
 public class ConvenorRestController {
 
+    private final ConvenorRepository convenorRepository;
+
     @Autowired
-    private ConvenorRepository convenorRepository;
+    public ConvenorRestController(ConvenorRepository convenorRepository) {
+        this.convenorRepository = convenorRepository;
+    }
 
     @GetMapping
     public ResponseEntity<List<Convenor>> listConvenors() {
@@ -33,11 +37,7 @@ public class ConvenorRestController {
     @GetMapping("/{id}")
     public ResponseEntity<Convenor> getConvenor(@PathVariable Long id) {
         Optional<Convenor> convenor = convenorRepository.findById(id);
-        if (convenor.isPresent()) {
-            return new ResponseEntity<>(convenor.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return convenor.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PutMapping("/{id}")
@@ -64,10 +64,6 @@ public class ConvenorRestController {
     @GetMapping("/{id}/modules")
     public ResponseEntity<List<Module>> listConvenorModules(@PathVariable Long id) {
         Optional<Convenor> convenor = convenorRepository.findById(id);
-        if (convenor.isPresent()) {
-            return new ResponseEntity<>(convenor.get().getModules(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return convenor.map(value -> new ResponseEntity<>(value.getModules(), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
