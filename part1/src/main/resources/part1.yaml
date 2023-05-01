@@ -311,13 +311,6 @@ components:
           type: string
         title:
           type: string
-      level:
-        type: integer
-        format:
-          minimum: 1
-          maximum: 4
-      optional:
-        type: boolean
     Session:
       type: object
       properties:
