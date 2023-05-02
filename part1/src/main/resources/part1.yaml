@@ -1,7 +1,7 @@
 openapi: 3.0.1
 
 info:
-  title: part1 
+  title: part1
   version: 1.0.0
 servers:
   - url: http://localhost:8080/
@@ -20,6 +20,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Convenor'
+        '400':
+          description: Bad Request
     post:
       summary: Create a convenor
       operationId: createConvenor
@@ -31,11 +33,13 @@ paths:
               $ref: '#/components/schemas/Convenor'
       responses:
         '201':
-          description: Module created
+          description: Convenor created
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Convenor'
+        '400':
+          description: Bad Request
   /convenors/{id}:
     parameters:
       - name: id
@@ -54,6 +58,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Convenor'
+        '404':
+          description: Convenor Not Found
     put:
       summary: Update a specific convenor
       operationId: updateConvenor
@@ -70,12 +76,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Convenor'
+        '400':
+          description: Bad Request
+        '404':
+          description: Convenor Not Found
     delete:
       summary: Delete a specific convenor
       operationId: deleteConvenor
       responses:
         '204':
           description: Convenor deleted
+        '404':
+          description: Convenor Not Found
   /convenors/{id}/modules:
     parameters:
       - name: id
@@ -96,6 +108,10 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Module'
+        '400':
+          description: Bad Request
+        '404':
+          description: Convenor Not Found
   /modules:
     get:
       summary: List all modules
@@ -109,6 +125,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Module'
+        '400':
+          description: Bad Request
     post:
       summary: Create a module
       operationId: createModule
@@ -125,6 +143,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Module'
+        '400':
+          description: Bad Request
   /modules/{code}:
     parameters:
       - name: code
@@ -142,6 +162,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Module'
+        '404':
+          description: Module Not Found
     patch:
       summary: Update a specific module partially
       operationId: updateModulePartially
@@ -158,12 +180,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Module'
+        '400':
+          description: Bad Request
+        '404':
+          description: Module Not Found
     delete:
       summary: Delete a specific module
       operationId: deleteModule
       responses:
         '204':
           description: Module deleted
+        '404':
+          description: Module Not Found
   /modules/{code}/sessions:
     parameters:
       - name: code
@@ -183,6 +211,10 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Session'
+        '400':
+          description: Bad Request
+        '404':
+          description: Module Not Found
     post:
       summary: Create a session in a module
       operationId: createModuleSession
@@ -199,6 +231,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Session'
+        '400':
+          description: Bad Request
+        '404':
+          description: Module Not Found
   /modules/{code}/sessions/{id}:
     parameters:
       - name: code
@@ -222,6 +258,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Session'
+        '404':
+          description: Session Not Found
     put:
       summary: Update a specific session in a module
       operationId: updateModuleSession
@@ -238,6 +276,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Session'
+        '400':
+          description: Bad Request
+        '404':
+          description: Session Not Found
     patch:
       summary: Update a specific session in a module partially
       operationId: updateModuleSessionPartially
@@ -254,12 +296,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Session'
+        '400':
+          description: Bad Request
+        '404':
+          description: Session Not Found
     delete:
       summary: Delete a specific session in a module
       operationId: deleteModuleSession
       responses:
         '204':
           description: Session deleted
+        '404':
+          description: Session Not Found
   /sessions:
     delete:
       summary: Delete all sessions
@@ -291,6 +339,9 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Session'
+        '400':
+          description: Bad Request
+
 components:
   schemas:
     Convenor:
@@ -318,6 +369,9 @@ components:
           type: string
         title:
           type: string
+      example:
+        code: CO2103
+        title:  Software Architecture and System Development
     Session:
       type: object
       properties:
