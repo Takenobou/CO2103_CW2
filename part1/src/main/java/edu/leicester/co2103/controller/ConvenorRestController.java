@@ -28,38 +28,38 @@ public class ConvenorRestController {
         return new ResponseEntity<>(convenors, HttpStatus.OK);
     }
 
+    @GetMapping(params = "id")
+    public ResponseEntity<Convenor> getConvenorById(@RequestParam Long id) {
+        Optional<Convenor> convenor = convenorRepository.findById(id);
+        return convenor.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+
     @PostMapping
     public ResponseEntity<Convenor> createConvenor(@RequestBody Convenor convenor) {
         Convenor createdConvenor = convenorRepository.save(convenor);
         return new ResponseEntity<>(createdConvenor, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Convenor> getConvenor(@PathVariable Long id) {
-        Optional<Convenor> convenor = convenorRepository.findById(id);
-        return convenor.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
     @PutMapping("/{id}")
-    public ResponseEntity<Convenor> updateConvenor(@PathVariable Long id, @RequestBody Convenor convenorUpdates) {
-        Optional<Convenor> convenor = convenorRepository.findById(id);
-        if (convenor.isPresent()) {
-            Convenor updatedConvenor = convenor.get();
-            updatedConvenor.setName(convenorUpdates.getName());
-            updatedConvenor.setPosition(convenorUpdates.getPosition());
-            updatedConvenor.setModules(convenorUpdates.getModules());
-            convenorRepository.save(updatedConvenor);
-            return new ResponseEntity<>(updatedConvenor, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Convenor> updateConvenor(@RequestBody Convenor updatedConvenor, @PathVariable("id") Long id) {
+        return convenorRepository.findById(id).map(convenor -> {
+            convenor.setName(updatedConvenor.getName());
+            convenor.setPosition(updatedConvenor.getPosition());
+            Convenor savedConvenor = convenorRepository.save(convenor);
+            return ResponseEntity.ok(savedConvenor);
+        }).orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteConvenor(@PathVariable Long id) {
+
+
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteConvenor(@RequestParam Long id) {
         convenorRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
     @GetMapping("/{id}/modules")
     public ResponseEntity<List<Module>> listConvenorModules(@PathVariable Long id) {

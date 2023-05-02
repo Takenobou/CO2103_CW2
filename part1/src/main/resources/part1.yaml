@@ -3,6 +3,9 @@ openapi: 3.0.1
 info:
   title: part1 
   version: 1.0.0
+servers:
+  - url: http://localhost:8080/
+    description: Localhost server
 paths:
   /convenors:
     get:
@@ -28,7 +31,7 @@ paths:
               $ref: '#/components/schemas/Convenor'
       responses:
         '201':
-          description: Convenor created
+          description: Module created
           content:
             application/json:
               schema:
@@ -304,6 +307,10 @@ components:
             - GTA
             - Lecturer
             - Professor
+      example:
+        id: 2
+        name: Klaudiusz Halek
+        position: Lecturer
     Module:
       type: object
       properties:
@@ -324,3 +331,8 @@ components:
           format: date-time
         duration:
           type: integer
+      example:
+        id: 6
+        topic: Basic Programming
+        timestamp: 2022-02-28 14:00:00
+        duration: 1

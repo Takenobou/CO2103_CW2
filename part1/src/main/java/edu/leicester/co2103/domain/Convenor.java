@@ -36,6 +36,10 @@ public class Convenor {
 		this.modules = modules;
 	}
 
+	public Convenor() {
+
+	}
+
 	public long getId() {
 		return id;
 	}

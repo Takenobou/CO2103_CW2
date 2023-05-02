@@ -17,7 +17,7 @@ import edu.leicester.co2103.domain.Module;
 import edu.leicester.co2103.repo.ModuleRepository;
 
 @RestController
-@RequestMapping("/api/modules")
+@RequestMapping("/modules")
 public class ModuleRestController {
 
     private final ModuleRepository moduleRepository;

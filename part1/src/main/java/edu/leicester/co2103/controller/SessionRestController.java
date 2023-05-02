@@ -18,7 +18,7 @@ import edu.leicester.co2103.domain.Session;
 import edu.leicester.co2103.repo.SessionRepository;
 
 @RestController
-@RequestMapping("/api/sessions")
+@RequestMapping("sessions")
 public class SessionRestController {
 
     private final SessionRepository sessionRepository;
