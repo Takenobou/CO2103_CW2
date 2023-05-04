@@ -1,19 +1,18 @@
 package edu.leicester.co2103.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import edu.leicester.co2103.domain.Module;
+import edu.leicester.co2103.domain.Session;
 import edu.leicester.co2103.repo.ModuleRepository;
 
 @RestController
@@ -22,42 +21,69 @@ public class ModuleRestController {
 
     private final ModuleRepository moduleRepository;
 
+    private final ObjectMapper objectMapper;
+
     @Autowired
-    public ModuleRestController(ModuleRepository moduleRepository) {
+    public ModuleRestController(ModuleRepository moduleRepository, ObjectMapper objectMapper) {
         this.moduleRepository = moduleRepository;
+        this.objectMapper = objectMapper;
     }
 
     @GetMapping
-    public List<Module> getAllModules() {
-        return (List<Module>) moduleRepository.findAll();
+    public ResponseEntity<List<Module>> getAllModules() {
+        List<Module> modules = (List<Module>) moduleRepository.findAll();
+        return new ResponseEntity<>(modules, HttpStatus.OK);
     }
 
     @GetMapping("/{code}")
-    public Optional<Module> getModuleByCode(@PathVariable String code) {
-        return moduleRepository.findById(code);
+    public ResponseEntity<Module> getModuleByCode(@PathVariable String code) {
+        Optional<Module> module = moduleRepository.findById(code);
+        return module.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
-    public Module createModule(@RequestBody Module module) {
-        return moduleRepository.save(module);
+    public ResponseEntity<Module> createModule(@RequestBody Module module) {
+        Module createdModule = moduleRepository.save(module);
+        return new ResponseEntity<>(createdModule, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{code}")
-    public Module updateModule(@PathVariable String code, @RequestBody Module updatedModule) {
-        return moduleRepository.findById(code).map(module -> {
-            module.setTitle(updatedModule.getTitle());
-            module.setLevel(updatedModule.getLevel());
-            module.setOptional(updatedModule.isOptional());
-            module.setSessions(updatedModule.getSessions());
-            return moduleRepository.save(module);
-        }).orElseGet(() -> {
-            updatedModule.setCode(code);
-            return moduleRepository.save(updatedModule);
-        });
+    @PatchMapping("/{code}")
+    public ResponseEntity<Module> updateModule(@PathVariable String code, @RequestBody Map<String, Object> updates) {
+        Optional<Module> optionalModule = moduleRepository.findById(code);
+
+        if (optionalModule.isPresent()) {
+            Module module = optionalModule.get();
+            updates.forEach((key, value) -> {
+                switch (key) {
+                    case "title":
+                        module.setTitle((String) value);
+                        break;
+                    case "level":
+                        module.setLevel((Integer) value);
+                        break;
+                    case "optional":
+                        module.setOptional((Boolean) value);
+                        break;
+                    case "sessions":
+                        List<Session> sessions = objectMapper.convertValue(value, new TypeReference<>() {
+                        });
+                        module.setSessions(sessions);
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Unexpected update field: " + key);
+                }
+            });
+
+            Module updatedModule = moduleRepository.save(module);
+            return ResponseEntity.ok(updatedModule);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{code}")
-    public void deleteModule(@PathVariable String code) {
+    public ResponseEntity<Void> deleteModule(@PathVariable String code) {
         moduleRepository.deleteById(code);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
