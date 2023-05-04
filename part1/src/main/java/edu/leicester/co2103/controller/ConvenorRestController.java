@@ -51,15 +51,11 @@ public class ConvenorRestController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
-
-
-
     @DeleteMapping
     public ResponseEntity<Void> deleteConvenor(@RequestParam Long id) {
         convenorRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 
     @GetMapping("/{id}/modules")
     public ResponseEntity<List<Module>> listConvenorModules(@PathVariable Long id) {

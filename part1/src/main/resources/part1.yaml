@@ -369,9 +369,17 @@ components:
           type: string
         title:
           type: string
+        level:
+          type: integer
+          minimum: 1
+          maximum: 4
+        optional:
+          type: boolean
       example:
         code: CO2103
-        title:  Software Architecture and System Development
+        title: Software Architecture and System Development
+        level: 2
+        optional: true
     Session:
       type: object
       properties:
