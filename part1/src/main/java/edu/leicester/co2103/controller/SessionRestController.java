@@ -27,7 +27,7 @@ public class SessionRestController {
     }
 
     @GetMapping
-    public List<Session> getAllSessions(@RequestParam(required = false) Long id, @RequestParam(required = false) String code) {
+    public List<Session> getAllSessions(@RequestParam(value = "convenor", required = false) Long id, @RequestParam(value = "module", required = false) String code) {
         List<Session> sessions = (List<Session>) sessionRepository.findAll();
 
         if (id != null) {
