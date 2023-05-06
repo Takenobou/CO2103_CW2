@@ -1,18 +1,21 @@
 package edu.leicester.co2103.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import edu.leicester.co2103.ErrorInfo;
+import edu.leicester.co2103.domain.Convenor;
+import edu.leicester.co2103.domain.Module;
+import edu.leicester.co2103.repo.ConvenorRepository;
+import edu.leicester.co2103.repo.ModuleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import edu.leicester.co2103.domain.Session;
 import edu.leicester.co2103.repo.SessionRepository;
@@ -24,7 +27,7 @@ public class SessionRestController {
     private final SessionRepository sessionRepository;
 
     @Autowired
-    public SessionRestController(SessionRepository sessionRepository) {
+    public SessionRestController(SessionRepository sessionRepository, ModuleRepository moduleRepository, ConvenorRepository convenorRepository) {
         this.sessionRepository = sessionRepository;
     }
 
@@ -33,34 +36,9 @@ public class SessionRestController {
         return (List<Session>) sessionRepository.findAll();
     }
 
-    @GetMapping("/{id}")
-    public Optional<Session> getSessionById(@PathVariable long id) {
-        return sessionRepository.findById(id);
-    }
-
-    @PostMapping
-    public Session createSession(@RequestBody Session session) {
-        return sessionRepository.save(session);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Session> updateSession(@PathVariable long id, @RequestBody Session updatedSession) {
-        Optional<Session> optionalSession = sessionRepository.findById(id);
-        if (!optionalSession.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Session session = optionalSession.get();
-        session.setTopic(updatedSession.getTopic());
-        session.setDatetime(updatedSession.getDatetime());
-        session.setDuration(updatedSession.getDuration());
-        sessionRepository.save(session);
-
-        return ResponseEntity.ok(session);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteSession(@PathVariable long id) {
-        sessionRepository.deleteById(id);
+    @DeleteMapping
+    public ResponseEntity<?> deleteSession() {
+        sessionRepository.deleteAll();
+        return ResponseEntity.ok(null);
     }
 }

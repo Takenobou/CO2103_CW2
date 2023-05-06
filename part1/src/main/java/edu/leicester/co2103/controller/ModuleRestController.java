@@ -2,10 +2,13 @@ package edu.leicester.co2103.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.leicester.co2103.ErrorInfo;
+import edu.leicester.co2103.repo.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +23,14 @@ import edu.leicester.co2103.repo.ModuleRepository;
 public class ModuleRestController {
 
     private final ModuleRepository moduleRepository;
+    private final SessionRepository sessionRepository;
 
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public ModuleRestController(ModuleRepository moduleRepository, ObjectMapper objectMapper) {
+    public ModuleRestController(ModuleRepository moduleRepository, SessionRepository sessionRepository, ObjectMapper objectMapper) {
         this.moduleRepository = moduleRepository;
+        this.sessionRepository = sessionRepository;
         this.objectMapper = objectMapper;
     }
 
@@ -36,7 +41,7 @@ public class ModuleRestController {
     }
 
     @GetMapping("/{code}")
-    public ResponseEntity<Module> getModuleByCode(@PathVariable String code) {
+    public ResponseEntity<Module> getModuleByCode(@PathVariable("code") String code) {
         Optional<Module> module = moduleRepository.findById(code);
         return module.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
@@ -48,7 +53,7 @@ public class ModuleRestController {
     }
 
     @PatchMapping("/{code}")
-    public ResponseEntity<Module> updateModule(@PathVariable String code, @RequestBody Map<String, Object> updates) {
+    public ResponseEntity<Module> updateModule(@PathVariable("code") String code, @RequestBody Map<String, Object> updates) {
         Optional<Module> optionalModule = moduleRepository.findById(code);
 
         if (optionalModule.isPresent()) {
@@ -82,8 +87,94 @@ public class ModuleRestController {
     }
 
     @DeleteMapping("/{code}")
-    public ResponseEntity<Void> deleteModule(@PathVariable String code) {
+    public ResponseEntity<Void> deleteModule(@PathVariable("code") String code) {
         moduleRepository.deleteById(code);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/{code}/sessions")
+    public ResponseEntity<List<Session>> getModuleSessions(@PathVariable("code") String code) {
+        Optional<Module> optionalModule = moduleRepository.findById(code);
+        if (optionalModule.isPresent()) {
+            Module module = optionalModule.get();
+            List<Session> sessions = module.getSessions();
+            return new ResponseEntity<>(sessions, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @PostMapping("/{code}/sessions")
+    public ResponseEntity<?> createSession(@PathVariable("code") String code, @RequestBody Session session) {
+        Module module = moduleRepository.findById(code)
+                .orElse(null);
+
+        if (module == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        module.getSessions().add(session);
+        moduleRepository.save(module);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{code}/sessions/{id}")
+    public ResponseEntity<?> getSessionById(@PathVariable("code") String code, @PathVariable("id") Long id) {
+        Session session = sessionRepository.findById(id).orElse(null);
+        return ResponseEntity.ok(session);
+    }
+
+
+    @PutMapping("/{code}/sessions/{id}")
+    public ResponseEntity<?> updateSession(@PathVariable("code") String code, @PathVariable("id") Long id, @RequestBody Session session) {
+        if (!sessionRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Session existingSession = sessionRepository.findById(id).orElse(null);
+        existingSession.setTopic(session.getTopic());
+        existingSession.setDatetime(session.getDatetime());
+        existingSession.setDuration(session.getDuration());
+        sessionRepository.save(existingSession);
+
+        return ResponseEntity.ok(existingSession);
+    }
+
+    @PatchMapping("/{code}/sessions/{id}")
+    public ResponseEntity<?> partiallyUpdateSession(@PathVariable("code") String code, @PathVariable("id") Long id, @RequestBody Session session) {
+        if (!sessionRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Session existingSession = sessionRepository.findById(id).orElse(null);
+
+        if (Objects.nonNull(session.getDuration())) {
+            existingSession.setDuration(session.getDuration());
+        }
+        if (session.getTopic() != null) {
+            existingSession.setTopic(session.getTopic());
+        }
+
+        if (session.getDatetime() != null) {
+            existingSession.setDatetime(session.getDatetime());
+        }
+
+
+        sessionRepository.save(existingSession);
+
+        return ResponseEntity.ok(existingSession);
+    }
+
+    @DeleteMapping("/{code}/sessions/{id}")
+    public ResponseEntity<?> deleteSession(@PathVariable("code") String code, @PathVariable("id") Long id) {
+        if (!sessionRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        sessionRepository.deleteById(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
+
 }

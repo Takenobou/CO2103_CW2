@@ -17,7 +17,6 @@ public class Convenor {
 	@Id
 	@GeneratedValue
 	private long id;
-
 	private String name;
 	private Position position;
 
@@ -71,5 +70,4 @@ public class Convenor {
 	public void setModules(List<Module> modules) {
 		this.modules = modules;
 	}
-
 }

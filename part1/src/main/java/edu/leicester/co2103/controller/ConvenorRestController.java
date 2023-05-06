@@ -1,5 +1,6 @@
 package edu.leicester.co2103.controller;
 
+import edu.leicester.co2103.ErrorInfo;
 import edu.leicester.co2103.domain.Convenor;
 import edu.leicester.co2103.domain.Module;
 import edu.leicester.co2103.repo.ConvenorRepository;
@@ -25,41 +26,52 @@ public class ConvenorRestController {
     @GetMapping
     public ResponseEntity<List<Convenor>> listConvenors() {
         List<Convenor> convenors = (List<Convenor>) convenorRepository.findAll();
+        if (convenors.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         return new ResponseEntity<>(convenors, HttpStatus.OK);
     }
 
-    @GetMapping(params = "id")
-    public ResponseEntity<Convenor> getConvenorById(@RequestParam Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Convenor> getConvenorById(@PathVariable("id") Long id) {
         Optional<Convenor> convenor = convenorRepository.findById(id);
-        return convenor.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return convenor.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity(new ErrorInfo("Convenor with id " + id + " not found"), HttpStatus.NOT_FOUND));
     }
 
 
     @PostMapping
-    public ResponseEntity<Convenor> createConvenor(@RequestBody Convenor convenor) {
+    public ResponseEntity<?> createConvenor(@RequestBody Convenor convenor) {
         Convenor createdConvenor = convenorRepository.save(convenor);
         return new ResponseEntity<>(createdConvenor, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Convenor> updateConvenor(@RequestBody Convenor updatedConvenor, @PathVariable("id") Long id) {
-        return convenorRepository.findById(id).map(convenor -> {
-            convenor.setName(updatedConvenor.getName());
-            convenor.setPosition(updatedConvenor.getPosition());
-            Convenor savedConvenor = convenorRepository.save(convenor);
-            return ResponseEntity.ok(savedConvenor);
-        }).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> updateConvenor(@PathVariable("id") Long id, @RequestBody Convenor updatedConvenor) {
+
+        if (convenorRepository.findById(id).isPresent()) {
+            Convenor currentConvenor = convenorRepository.findById(id).get();
+            currentConvenor.setName(updatedConvenor.getName());
+            currentConvenor.setPosition(updatedConvenor.getPosition());
+            convenorRepository.save(currentConvenor);
+            return new ResponseEntity<Convenor>(currentConvenor, HttpStatus.OK);
+        } else
+            return new ResponseEntity<ErrorInfo>(new ErrorInfo("Convenor with id "+ id + " not found"), HttpStatus.NOT_FOUND);
+
+
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> deleteConvenor(@RequestParam Long id) {
-        convenorRepository.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteConvenor(@PathVariable("id") Long id) {
+        if (convenorRepository.findById(id).isPresent()) {
+            convenorRepository.deleteById(id);
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } else
+            return new ResponseEntity<ErrorInfo>(new ErrorInfo("Convenor with id "+ id +" not found"), HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/{id}/modules")
-    public ResponseEntity<List<Module>> listConvenorModules(@PathVariable Long id) {
+    public ResponseEntity<List<Module>> listConvenorModules(@PathVariable("id") Long id) {
         Optional<Convenor> convenor = convenorRepository.findById(id);
-        return convenor.map(value -> new ResponseEntity<>(value.getModules(), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return convenor.map(value -> new ResponseEntity<>(value.getModules(), HttpStatus.OK)).orElseGet(() -> new ResponseEntity(new ErrorInfo("Convenor's modules with id " + id + " not found"), HttpStatus.NOT_FOUND));
     }
 }
