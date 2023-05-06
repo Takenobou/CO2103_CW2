@@ -70,4 +70,8 @@ public class Convenor {
 	public void setModules(List<Module> modules) {
 		this.modules = modules;
 	}
+
+	public List<Session> getSessions() {
+		return null;
+	}
 }

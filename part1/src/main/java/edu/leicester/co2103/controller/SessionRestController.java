@@ -27,19 +27,19 @@ public class SessionRestController {
     }
 
     @GetMapping
-    public List<Session> getAllSessions(@RequestParam(required = false) Long convenor, @RequestParam(required = false) String module) {
+    public List<Session> getAllSessions(@RequestParam(required = false) Long id, @RequestParam(required = false) String code) {
         List<Session> sessions = (List<Session>) sessionRepository.findAll();
 
-        if (convenor != null) {
+        if (id != null) {
             sessions = sessions.stream()
-                    .filter(session -> convenorRepository.findById(convenor).get().getModules().stream()
+                    .filter(session -> convenorRepository.findById(id).get().getModules().stream()
                             .anyMatch(module1 -> module1.getSessions().contains(session)))
                     .collect(Collectors.toList());
         }
 
-        if (module != null) {
+        if (code != null) {
             sessions = sessions.stream()
-                    .filter(session -> moduleRepository.findById(module).get().getSessions().contains(session))
+                    .filter(session -> moduleRepository.findById(code).get().getSessions().contains(session))
                     .collect(Collectors.toList());
         }
 
