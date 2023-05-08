@@ -3,13 +3,7 @@ package edu.leicester.co2103.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 
 @Entity
 public class Convenor {
@@ -17,11 +11,12 @@ public class Convenor {
 	@Id
 	@GeneratedValue
 	private long id;
+
 	private String name;
 	private Position position;
 
 	@ManyToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-	@JoinColumn
+	@JoinTable
 	private List<Module> modules;
 
 	public Convenor(String name, Position position) {
@@ -71,7 +66,4 @@ public class Convenor {
 		this.modules = modules;
 	}
 
-	public List<Session> getSessions() {
-		return null;
-	}
 }

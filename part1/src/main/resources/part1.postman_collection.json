@@ -1,3 +1,1018 @@
 {
-	"info": "Placeholder file, replace this content with your Postman Collection"
+	"info": {
+		"_postman_id": "11e1f3cc-d77e-4906-9a6e-91b69ea32615",
+		"name": "part1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25972150",
+		"_collection_link": "https://winter-spaceship-183465.postman.co/workspace/My-Workspace~efb5f035-a41b-453d-80bf-7fd9c6f3d3b1/collection/25972150-11e1f3cc-d77e-4906-9a6e-91b69ea32615?action=share&creator=25972150&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "GET convenors",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/convenors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"convenors"
+					]
+				}
+			},
+			"response": [[{"id":3,"name":"Jose Rojas","position":"PROFESSOR","modules":[{"code":"CO2103","title":"Software Architecture","level":2,"optional":false,"sessions":[{"id":1,"topic":"REST APIs","datetime":"2022-02-25T12:00:00.000+00:00","duration":2}]}]},{"id":4,"name":"Kehinde Aruleba","position":"LECTURER","modules":[{"code":"CO2103","title":"Software Architecture","level":2,"optional":false,"sessions":[{"id":1,"topic":"REST APIs","datetime":"2022-02-25T12:00:00.000+00:00","duration":2}]},{"code":"CO3095","title":"Software Quality","level":3,"optional":true,"sessions":[{"id":2,"topic":"Unit Testing","datetime":"2022-02-28T14:00:00.000+00:00","duration":2}]}]}]]
+		},
+		{
+			"name": "GET convenors",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/convenors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"convenors"
+					]
+				}
+			},
+			"response": [{"message":"Convenors not found"}]
+		},
+		{
+			"name": "POST create convenor",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Klaudiusz Halek\",\r\n    \"position\": \"PROFESSOR\",\r\n    \"modules\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/convenors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"convenors"
+					]
+				}
+			},
+			"response": [{"id":5,"name":"Klaudiusz Halek","position":"PROFESSOR","modules":null}]
+		},
+		{
+			"name": "POST create convenor",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Klaudiusz Halek\",\r\n    \"position\": \"PROFESSO\",\r\n    \"modules\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/convenors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"convenors"
+					]
+				}
+			},
+			"response": [{"message":"Invalid position"}]
+		},
+		{
+			"name": "GET convenorsByID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/convenors/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"convenors",
+						"5"
+					]
+				}
+			},
+			"response": [{"id":5,"name":"Klaudiusz Halek","position":"PROFESSOR","modules":[]}]
+		},
+		{
+			"name": "GET convenorsByID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/convenors/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"convenors",
+						"5"
+					]
+				}
+			},
+			"response": [{"message":"Convenor with id 5 not found"}]
+		},
+		{
+			"name": "PUT convenorsByID",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\": \"Alex Martin\",\"position\": \"GTA\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/convenors/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"convenors",
+						"5"
+					]
+				}
+			},
+			"response": [{"id":5,"name":"Alex Martin","position":"GTA","modules":[]}]
+		},
+		{
+			"name": "PUT convenorsByID",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\": \"Alex Martin\",\"position\": \"GTA\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/convenors/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"convenors",
+						"5"
+					]
+				}
+			},
+			"response": [{"message":"Convenor with id 5 not found"}]
+		},
+		{
+			"name": "DELETE convenorsByID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/convenors/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"convenors",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE convenorsByID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/convenors/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"convenors",
+						"3"
+					]
+				}
+			},
+			"response": [{"message":"Convenor with id 3 not found"}]
+		},
+		{
+			"name": "GET convenorsByID modules",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/convenors/4/modules",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"convenors",
+						"4",
+						"modules"
+					]
+				}
+			},
+			"response": [[{"code":"CO2103","title":"Software Architecture","level":2,"optional":false,"sessions":[{"id":1,"topic":"REST APIs","datetime":"2022-02-25T12:00:00.000+00:00","duration":2}]},{"code":"CO3095","title":"Software Quality","level":3,"optional":true,"sessions":[{"id":2,"topic":"Unit Testing","datetime":"2022-02-28T14:00:00.000+00:00","duration":2}]}]]
+		},
+		{
+			"name": "GET convenorsByID modules",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/convenors/4/modules",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"convenors",
+						"4",
+						"modules"
+					]
+				}
+			},
+			"response": [{"message":"Convenor with id 4 not found"}]
+		},
+		{
+			"name": "GET modules",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/modules",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules"
+					]
+				}
+			},
+			"response": [[{"code":"CO2103","title":"Software Architecture","level":2,"optional":false,"sessions":[{"id":1,"topic":"REST APIs","datetime":"2022-02-25T12:00:00.000+00:00","duration":2}]},{"code":"CO3095","title":"Software Quality","level":3,"optional":true,"sessions":[{"id":2,"topic":"Unit Testing","datetime":"2022-02-28T14:00:00.000+00:00","duration":2}]}]]
+		},
+		{
+			"name": "GET modules",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/modules",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules"
+					]
+				}
+			},
+			"response": [{"message":"Modules not found"}]
+		},
+		{
+			"name": "POST modules",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"code\": \"CO2105\",\r\n    \"title\": \"Software programming\",\r\n    \"level\": 3,\r\n    \"optional\": false,\r\n    \"sessions\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/modules",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules"
+					]
+				}
+			},
+			"response": [{"code":"CO2105","title":"Software programming","level":3,"optional":false,"sessions":[]}]
+		},
+		{
+			"name": "POST modules",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"code\": \"CO2105\",\r\n    \"title\": \"Software programming\",\r\n    \"level\": 4,\r\n    \"optional\": false,\r\n    \"sessions\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/modules",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules"
+					]
+				}
+			},
+			"response": [{"message":"Invalid level"}]
+		},
+		{
+			"name": "GET modulesByCode",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/modules/CO2103",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules",
+						"CO2103"
+					]
+				}
+			},
+			"response": [{"code":"CO2103","title":"Software Architecture","level":2,"optional":false,"sessions":[{"id":1,"topic":"REST APIs","datetime":"2022-02-25T12:00:00.000+00:00","duration":2}]}]
+		},
+		{
+			"name": "GET modulesByCode",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/modules/CO2103",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules",
+						"CO2103"
+					]
+				}
+			},
+			"response": [{"message":"Module with code CO2103 not found"}]
+		},
+		{
+			"name": "PATCH moduleByCode",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"level\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/modules/CO2105",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules",
+						"CO2105"
+					]
+				}
+			},
+			"response": [{"code":"CO2105","title":"Software programming","level":2,"optional":false,"sessions":[]}]
+		},
+		{
+			"name": "PATCH moduleByCode",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"level\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/modules/CO2105",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules",
+						"CO2105"
+					]
+				}
+			},
+			"response": [{"message":"Module with code CO2105 not found"}]
+		},
+		{
+			"name": "DELETE ModuleByCode",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/modules/CO2103",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules",
+						"CO2103"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE ModuleByCode",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/modules/CO2103",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules",
+						"CO2103"
+					]
+				}
+			},
+			"response": [{"message":"Module with code CO2103 not found"}]
+		},
+		{
+			"name": "GET ModulesSessions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/modules/CO3095/sessions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules",
+						"CO3095",
+						"sessions"
+					]
+				}
+			},
+			"response": [[{"id":2,"topic":"Unit Testing","datetime":"2022-02-28T14:00:00.000+00:00","duration":2}]]
+		},
+		{
+			"name": "GET ModulesSessions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/modules/CO3095/sessions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules",
+						"CO3095",
+						"sessions"
+					]
+				}
+			},
+			"response": [{"message":"Module with code CO3095 sessions are not found"}]
+		},
+		{
+			"name": "POST ModulesSession",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"topic\": \"Programming\",\r\n    \"datetime\": \"2022-02-25T10:00:00.000+00:00\",\r\n    \"duration\": 3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/modules/CO3095/sessions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules",
+						"CO3095",
+						"sessions"
+					]
+				}
+			},
+			"response": [{"id":5,"topic":"Programming","datetime":"2022-02-25T10:00:00.000+00:00","duration":3}]
+		},
+		{
+			"name": "POST ModulesSession",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"topic\": \"Programming\",\r\n    \"datetime\": \"2022-02-25T10:00:00.000+00:00\",\r\n    \"duration\": 3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/modules/CO3095/sessions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules",
+						"CO3095",
+						"sessions"
+					]
+				}
+			},
+			"response": [{"message":"Module with code CO3095 sessions are not found"}]
+		},
+		{
+			"name": "GET ModulesSessionsId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/modules/CO3095/sessions/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules",
+						"CO3095",
+						"sessions",
+						"2"
+					]
+				}
+			},
+			"response": [{"id":2,"topic":"Unit Testing","datetime":"2022-02-28T14:00:00.000+00:00","duration":2}]
+		},
+		{
+			"name": "GET ModulesSessionsId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/modules/CO3095/sessions/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules",
+						"CO3095",
+						"sessions",
+						"2"
+					]
+				}
+			},
+			"response": [{"message":"Session with id 2 not found"}]
+		},
+		{
+			"name": "PUT ModuleSessions",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"topic\": \"TestTest\", \"datetime\": \"2022-02-25T10:00:00.000+00:00\", \"duration\": 1}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/modules/CO3095/sessions/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules",
+						"CO3095",
+						"sessions",
+						"5"
+					]
+				}
+			},
+			"response": [{"id":5,"topic":"TestTest","datetime":"2022-02-25T10:00:00.000+00:00","duration":1}]
+		},
+		{
+			"name": "PUT ModuleSessions",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"topic\": \"TestTest\", \"datetime\": \"2022-02-25T10:00:00.000+00:00\", \"duration\": 1}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/modules/CO3095/sessions/6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules",
+						"CO3095",
+						"sessions",
+						"6"
+					]
+				}
+			},
+			"response": [{"message":"Session with id 6 not found"}]
+		},
+		{
+			"name": "PATCH ModuleSessions",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"duration\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/modules/CO3095/sessions/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules",
+						"CO3095",
+						"sessions",
+						"5"
+					]
+				}
+			},
+			"response": [{"id":5,"topic":"TestTest","datetime":"2022-02-25T10:00:00.000+00:00","duration":2}]
+		},
+		{
+			"name": "PATCH ModuleSessions",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"duration\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/modules/CO3095/sessions/6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules",
+						"CO3095",
+						"sessions",
+						"6"
+					]
+				}
+			},
+			"response": [{"message":"Session with id 6 not found"}]
+		},
+		{
+			"name": "DELETE ModulesSession",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/modules/CO2103/sessions/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules",
+						"CO2103",
+						"sessions",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE ModulesSession",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/modules/CO2103/sessions/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"modules",
+						"CO2103",
+						"sessions",
+						"1"
+					]
+				}
+			},
+			"response": [{"message":"Session with id 1 not found"}]
+		},
+		{
+			"name": "GET Sessions by id and code",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sessions?convenor=4&module=CO3095",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sessions"
+					],
+					"query": [
+						{
+							"key": "convenor",
+							"value": "4"
+						},
+						{
+							"key": "module",
+							"value": "CO3095"
+						}
+					]
+				}
+			},
+			"response": [[{"id":2,"topic":"Unit Testing","datetime":"2022-02-28T14:00:00.000+00:00","duration":2}]]
+		},
+
+		{
+			"name": "GET Sessions by id and code",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sessions?module=CO2103",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sessions"
+					],
+					"query": [
+						{
+							"key": "module",
+							"value": "CO2103"
+						}
+					]
+				}
+			},
+			"response": [[{"id":1,"topic":"REST APIs","datetime":"2022-02-25T12:00:00.000+00:00","duration":2}]]
+		},
+		{
+			"name": "GET Sessions by id and code",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sessions?convenor=4&module=CO2137",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sessions"
+					],
+					"query": [
+						{
+							"key": "convenor",
+							"value": "4"
+						},
+						{
+							"key": "module",
+							"value": "CO2137"
+						}
+					]
+				}
+			},
+			"response": [{"message":"Convenor with id 4 not found"}]
+		},
+		{
+			"name": "GET Sessions by id and code",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sessions?module=CO2137",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sessions"
+					],
+					"query": [
+						{
+							"key": "module",
+							"value": "CO2137"
+						}
+					]
+				}
+			},
+			"response": [{"message": "Module with code CO2137 not found"}]
+		},
+		{
+			"name": "DELETE ALL sessions",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sessions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sessions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE ALL sessions",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sessions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sessions"
+					]
+				}
+			},
+			"response": [{"message":"No sessions found"}]
+		}
+	]
 }

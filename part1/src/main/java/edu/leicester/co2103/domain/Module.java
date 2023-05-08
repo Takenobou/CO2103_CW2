@@ -1,7 +1,6 @@
 package edu.leicester.co2103.domain;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.CascadeType;

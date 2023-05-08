@@ -54,7 +54,7 @@ public class SessionRestController {
         }
 
         if (sessions.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new ErrorInfo("Session not found"), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(sessions, HttpStatus.OK);
     }
@@ -62,7 +62,13 @@ public class SessionRestController {
 
     @DeleteMapping
     public ResponseEntity<?> deleteSession() {
+        long numSessions = sessionRepository.count();
+        if (numSessions == 0) {
+            return new ResponseEntity<>(new ErrorInfo("No sessions found"), HttpStatus.NOT_FOUND);
+        }
         sessionRepository.deleteAll();
         return ResponseEntity.ok(null);
     }
+
+
 }
