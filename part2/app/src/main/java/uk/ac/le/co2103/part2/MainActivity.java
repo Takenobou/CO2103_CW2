@@ -1,5 +1,7 @@
 package uk.ac.le.co2103.part2;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,10 +18,9 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static final int ADD_SHOPPING_LIST_REQUEST = 1;
-
     private RecyclerView recyclerView;
     private ShoppingListAdapter shoppingListAdapter;
+    private ActivityResultLauncher<Intent> createListLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,19 +38,16 @@ public class MainActivity extends AppCompatActivity {
         shoppingListAdapter = new ShoppingListAdapter(new ArrayList<>());
         recyclerView.setAdapter(shoppingListAdapter);
 
-        button.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, AddShoppingListActivity.class);
-            startActivityForResult(intent, ADD_SHOPPING_LIST_REQUEST);
+        createListLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                ShoppingList shoppingList = (ShoppingList) result.getData().getSerializableExtra(CreateListActivity.EXTRA_SHOPPING_LIST);
+                shoppingListAdapter.addShoppingList(shoppingList);
+            }
         });
-    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == ADD_SHOPPING_LIST_REQUEST && resultCode == RESULT_OK) {
-            ShoppingList shoppingList = (ShoppingList) data.getSerializableExtra(AddShoppingListActivity.EXTRA_SHOPPING_LIST);
-            shoppingListAdapter.addShoppingList(shoppingList);
-        }
+        button.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, CreateListActivity.class);
+            createListLauncher.launch(intent);
+        });
     }
 }
