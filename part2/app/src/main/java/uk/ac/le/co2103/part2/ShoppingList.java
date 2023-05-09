@@ -1,19 +1,22 @@
 package uk.ac.le.co2103.part2;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ShoppingList implements Serializable {
-    private String listId;
+public class ShoppingList {
+    private int listId;
     private String name;
-    private String image;
+    private String imageUri;
+    private List<Product> products;
 
-    public ShoppingList(String listId, String name, String image) {
+    public ShoppingList(int listId, String name, String imageUri) {
         this.listId = listId;
         this.name = name;
-        this.image = image;
+        this.imageUri = imageUri;
+        this.products = new ArrayList<>();
     }
 
-    public String getListId() {
+    public int getListId() {
         return listId;
     }
 
@@ -21,7 +24,23 @@ public class ShoppingList implements Serializable {
         return name;
     }
 
-    public String getImage() {
-        return image;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void addProduct(Product product) {
+        this.products.add(product);
     }
 }

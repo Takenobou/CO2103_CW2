@@ -4,7 +4,7 @@
     <string name="hint_product">Product Name...</string>
     <string name="button_save">Save</string>
 
-    <string-array name="labels_unit">
+    <string-array name="unit_array">
         <item>Unit</item>
         <item>Kg</item>
         <item>Liter</item>

@@ -2,83 +2,66 @@ package uk.ac.le.co2103.part2;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
-
-import java.io.IOException;
-import java.util.UUID;
 
 public class CreateListActivity extends AppCompatActivity {
+    private static final int PICK_IMAGE_REQUEST_CODE = 1;
 
-    public static final String EXTRA_SHOPPING_LIST = "uk.ac.le.co2103.part2.EXTRA_SHOPPING_LIST";
-    private static final int PICK_IMAGE_REQUEST = 2;
+    private EditText nameEditText;
+    private ImageView imageImageView;
 
-    private EditText editTextListName;
-    private Button buttonPickImage;
-    private ImageView imageView;
-    private Button buttonCreateList;
-
-    private Uri pickedImageUri;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_list);
 
-        editTextListName = findViewById(R.id.editText_list_name);
-        buttonPickImage = findViewById(R.id.button_pick_image);
-        imageView = findViewById(R.id.imageView);
-        buttonCreateList = findViewById(R.id.button_create_list);
+        nameEditText = findViewById(R.id.nameEditText);
+        imageImageView = findViewById(R.id.imageImageView);
 
-        buttonPickImage.setOnClickListener(v -> pickImageFromGallery());
-        buttonCreateList.setOnClickListener(v -> createShoppingList());
+        Button createButton = findViewById(R.id.createButton);
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = nameEditText.getText().toString();
+                String imageUriString = imageUri != null ? imageUri.toString() : null;
+
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("name", name);
+                resultIntent.putExtra("imageUri", imageUriString);
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+        });
+
+        Button chooseImageButton = findViewById(R.id.chooseImageButton);
+        chooseImageButton.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("image/*");
+            startActivityForResult(intent, PICK_IMAGE_REQUEST_CODE);
+        });
     }
 
-    private void pickImageFromGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
-    }
-
-    private void createShoppingList() {
-        String shoppingListName = editTextListName.getText().toString().trim();
-
-        if (shoppingListName.isEmpty()) {
-            Toast.makeText(this, "Please enter a shopping list name", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String listId = UUID.randomUUID().toString();
-        ShoppingList shoppingList = new ShoppingList(listId, shoppingListName, pickedImageUri != null ? pickedImageUri.toString() : null);
-
-        Intent data = new Intent();
-        data.putExtra(EXTRA_SHOPPING_LIST, shoppingList);
-        setResult(RESULT_OK, data);
-        finish();
-    }
-
-
+    // Method to handle the result of the image picker
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            pickedImageUri = data.getData();
-
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), pickedImageUri);
-                imageView.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            // Take persistable permission to access the uri across reboots
+            getContentResolver().takePersistableUriPermission(imageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            imageImageView.setImageURI(imageUri);
+            imageImageView.setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent));
         }
     }
 }
